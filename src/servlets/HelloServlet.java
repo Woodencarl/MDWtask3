@@ -21,12 +21,18 @@ public class HelloServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String cookies = request.getCookies().toString();
+
+		String cookies;
+		try {
+			cookies = request.getCookies().toString();
+		} catch (Exception ex) {
+			cookies = "default";
+		}
 		DB db = DB.getInstance();
 		String job = request.getParameter("job");
 		if (job == null)
 			return;
-		if(job.equals("PRINTALL")){
+		if (job.equals("PRINTALL")) {
 			response.getWriter().append(db.printAll());
 			return;
 		}
@@ -38,11 +44,7 @@ public class HelloServlet extends HttpServlet {
 				response.getWriter().append("Trip Entry not found!\n");
 				return;
 			}
-
 		}
-		response.getWriter().append(request.toString() + "\n");
-
-		response.getWriter().append("COOKIES:" + cookies + "\n");
 
 		if (!db.exists(cookies) && job.equals("NEW")) {
 			db.addTrip(cookies, 1);

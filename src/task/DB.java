@@ -14,39 +14,41 @@ public class DB {
 		return instance;
 	}
 
-	public boolean proceed(String a, String req) {
-		Integer status = ht.get(a);
-		switch (req) {
+	public boolean proceed(String job, String cookies) {
+		Integer status = ht.get(cookies);
+		switch (job) {
 		case "RESERVATION":
 			if (status == 1) {
 				status++;
-				ht.remove(a);
-				ht.put(a, status);
+				ht.remove(cookies);
+				ht.put(cookies, status);
 				return true;
 			}
 			break;
 		case "PAID":
 			if (status == 2) {
 				status++;
-				ht.remove(a);
-				ht.put(a, status);
+				ht.remove(cookies);
+				ht.put(cookies, status);
 				return true;
 			}
 			break;
 
 		default:
 			return false;
-			
+
 		}
 
 		return false;
 	}
 
 	public boolean exists(String a) {
-		boolean ret=false;
-		try{ ret=ht.contains(a);
-		}catch (NullPointerException ex){
-			ret=false;
+		boolean ret = true;
+		try {
+			ret = ht.containsKey(a);
+			
+		} catch (NullPointerException ex) {
+			ret = false;
 		}
 		return ret;
 	}
@@ -76,10 +78,10 @@ public class DB {
 	}
 
 	public String printAll() {
-		String ret="";
+		String ret = "";
 		Set<String> keys = ht.keySet();
 		for (String key : keys) {
-			ret+= key + " status: " + ht.get(key).toString() + "\n"; 
+			ret += key + " status: " + ht.get(key).toString() + "\n";
 		}
 		return ret;
 
